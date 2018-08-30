@@ -138,7 +138,7 @@ class Storage_info(object):
             self.src_ip_addr = src_ip_addr.strip('\x00')
             self.totalMB = appromix(totalMB, FDFS_SPACE_SIZE_BASE_INDEX)
             self.freeMB = appromix(freeMB, FDFS_SPACE_SIZE_BASE_INDEX)
-        except ValueError, e:
+        except ValueError as e:
             raise ResponseError('[-] Error: disk space overrun, can not represented it.')
         self.join_time = datetime.fromtimestamp(join_time).isoformat()
         self.up_time   = datetime.fromtimestamp(up_time).isoformat()

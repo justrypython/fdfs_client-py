@@ -3,8 +3,8 @@
 # filename: utils.py
 
 import os, sys, stat
-import ConfigParser 
-import StringIO 
+import configparser 
+from io import StringIO
 
 SUFFIX = ['B', 'KB', 'MB', 'GB','TB', 'PB', 'EB', 'ZB', 'YB']
 def appromix(size, base = 0):
@@ -38,16 +38,16 @@ def get_file_ext_name(filename, double_ext = True):
                 return '%s.%s' % (li[-2], li[-1])
     return li[-1]
 
-class Fdfs_ConfigParser(ConfigParser.RawConfigParser): 
+class Fdfs_configparser(configparser.RawConfigParser): 
     """ 
-    Extends ConfigParser to allow files without sections. 
+    Extends configparser to allow files without sections. 
  
     This is done by wrapping read files and prepending them with a placeholder 
     section, which defaults to '__config__' 
     """ 
  
     def __init__(self, default_section=None, *args, **kwargs): 
-        ConfigParser.RawConfigParser.__init__(self, *args, **kwargs) 
+        configparser.RawConfigParser.__init__(self, *args, **kwargs) 
  
         self._default_section = None 
         self.set_default_section(default_section or '__config__') 
@@ -62,7 +62,7 @@ class Fdfs_ConfigParser(ConfigParser.RawConfigParser):
         try: 
             default_section_items = self.items(self._default_section) 
             self.remove_section(self._default_section) 
-        except ConfigParser.NoSectionError: 
+        except configparser.NoSectionError: 
             pass 
         else: 
             for (key, value) in default_section_items: 
@@ -71,7 +71,7 @@ class Fdfs_ConfigParser(ConfigParser.RawConfigParser):
         self._default_section = section 
  
     def read(self, filenames): 
-        if isinstance(filenames, basestring): 
+        if isinstance(filenames, str): 
             filenames = [filenames] 
  
         read_ok = [] 
@@ -87,7 +87,7 @@ class Fdfs_ConfigParser(ConfigParser.RawConfigParser):
         return read_ok 
  
     def readfp(self, fp, *args, **kwargs): 
-        stream = StringIO.StringIO() 
+        stream = StringIO() 
  
         try: 
             stream.name = fp.name 
@@ -111,10 +111,10 @@ class Fdfs_ConfigParser(ConfigParser.RawConfigParser):
                 fp.write("{0} = {1}\n".format(key, value)) 
  
             fp.write("\n") 
-        except ConfigParser.NoSectionError: 
+        except configparser.NoSectionError: 
             pass 
  
-        ConfigParser.RawConfigParser.write(self, fp) 
+        configparser.RawConfigParser.write(self, fp) 
  
         self.add_section(self._default_section) 
         for (key, value) in default_section_items: 
@@ -185,7 +185,7 @@ class Fdfs_ConfigParser(ConfigParser.RawConfigParser):
                         if optval == '""':
                             optval = ''
                         optname = self.optionxform(optname.rstrip())
-                        if cursect.has_key(optname):
+                        if optname in cursect:
                             if not isinstance(cursect[optname], list):
                                 cursect[optname] = [cursect[optname]]
                             cursect[optname].append(optval)
@@ -227,5 +227,5 @@ def fdfs_check_file(filename):
     return (ret, errmsg)
 
 if __name__ == '__main__':
-    print get_file_ext_name('/bc.tar.gz')
+    print (get_file_ext_name('/bc.tar.gz'))
     

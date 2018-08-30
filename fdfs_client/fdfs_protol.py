@@ -196,7 +196,7 @@ class Tracker_header(object):
         header = self._pack(self.pkg_len, self.cmd, self.status)
         try:
             conn.sendall(header)
-        except (socket.error, socket.timeout), e:
+        except (socket.error, socket.timeout) as e:
             raise ConnectionError('[-] Error: while writting to socket: %s' \
                                   % (e.args,))
         
@@ -206,7 +206,7 @@ class Tracker_header(object):
         '''
         try:
             header = conn.recv(self.header_len())
-        except (socket.error, socket.timeout), e:
+        except (socket.error, socket.timeout) as e:
             raise ConnectionError('[-] Error: while reading from socket: %s' \
                                   % (e.args,))
         if not header:

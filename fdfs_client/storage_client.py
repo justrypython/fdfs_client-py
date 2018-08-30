@@ -38,9 +38,9 @@ def tcp_send_file(conn, filename, buffer_size = 1024):
                     break
                 tcp_send_data(conn, send_buffer)
                 file_size += send_size
-            except ConnectionError, e:
+            except ConnectionError as e:
                 raise ConnectionError('[-] Error while uploading file(%s).' % e.args)
-            except IOError, e:
+            except IOError as e:
                 raise DataError('[-] Error while reading local file(%s).' % e.args)
     return file_size
 
@@ -66,7 +66,7 @@ def tcp_send_file_ex(conn, filename, buffer_size = 4096):
                     break
                 nbytes += sent
                 offset += sent
-            except OSError, e:
+            except OSError as e:
                 if e.errno == errno.EAGAIN:
                     continue
                 raise
@@ -102,9 +102,9 @@ def tcp_recv_file(conn, local_filename, file_size, buffer_size = 1024):
                 if flush_size >= 4096:
                     f.flush()
                     flush_size = 0
-            except ConnectionError, e:
+            except ConnectionError as e:
                 raise ConnectionError('[-] Error: while downloading file(%s).' % e.args)
-            except IOError, e:
+            except IOError as e:
                 raise DataError('[-] Error: while writting local file(%s).' % e.args)
     return total_file_size
     

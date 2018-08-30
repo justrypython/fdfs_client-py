@@ -39,7 +39,7 @@ class Connection(object):
             return
         try:
             sock = self._connect()
-        except socket.error, e:
+        except socket.error as e:
             raise ConnectionError(self._errormessage(e))
         self._sock = sock
         #print '[+] Create a connection success.'
@@ -69,7 +69,7 @@ class Connection(object):
             return
         try:
             self._sock.close()
-        except socket.error, e:
+        except socket.error as e:
             pass
         self._sock = None
 
@@ -120,8 +120,8 @@ class ConnectionPool(object):
                 conn_instance.connect()
                 self._conns_created += 1
                 break
-            except ConnectionError, e:
-                print e
+            except ConnectionError as e:
+                print (e)
                 num_try -= 1
                 conn_instance = None
         return conn_instance
@@ -181,7 +181,7 @@ def tcp_recv_response(conn, bytes_size, buffer_size = 4096):
             recv_buff.append(resp)
             total_size += len(resp)
             bytes_size -= len(resp)
-    except (socket.error, socket.timeout), e:
+    except (socket.error, socket.timeout) as e:
             raise ConnectionError('[-] Error: while reading from socket: (%s)' \
                                     % e.args)
     return (''.join(recv_buff), total_size)
@@ -196,6 +196,6 @@ def tcp_send_data(conn, bytes_stream):
     '''
     try:
         conn._sock.sendall(bytes_stream)
-    except (socket.error, socket.timeout), e:
+    except (socket.error, socket.timeout) as e:
         raise ConnectionError('[-] Error: while writting to socket: (%s)' \
                                 % e.args)

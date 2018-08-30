@@ -15,7 +15,7 @@ from fdfs_client.storage_client import *
 from fdfs_client.exceptions import *
 
 def get_tracker_conf(conf_path = 'client.conf'):
-    cf = Fdfs_ConfigParser()
+    cf = Fdfs_configparser()
     tracker = {}
     try:
         cf.read(conf_path)
